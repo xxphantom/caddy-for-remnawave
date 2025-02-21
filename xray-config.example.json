@@ -1,0 +1,63 @@
+{
+  "log": {
+    "loglevel": "info"
+  },
+  "inbounds": [
+    {
+      "tag": "VLESS TCP REALITY",
+      "port": 443,
+      "listen": "0.0.0.0",
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls", "quic"]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "dest": "9443",
+          "show": false,
+          "xver": 0,
+          "shortIds": ["", "6ba85179e30d4fc2"],
+          "publicKey": "134ZpoOXd8K5NwrOwqCsRQ9vgd5FREaKJc6jAr2tK0M",
+          "privateKey": "DVWpwaBSJC59CxLVNbI5KflgSoL7Dd4rV8yHDKWTA_4",
+          "serverNames": ["reality.example.com"]
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "DIRECT",
+      "protocol": "freedom"
+    },
+    {
+      "tag": "BLOCK",
+      "protocol": "blackhole"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "ip": ["geoip:private"],
+        "type": "field",
+        "outboundTag": "BLOCK"
+      },
+      {
+        "type": "field",
+        "domain": ["geosite:private"],
+        "outboundTag": "BLOCK"
+      },
+      {
+        "type": "field",
+        "protocol": ["bittorrent"],
+        "outboundTag": "BLOCK"
+      }
+    ]
+  }
+}

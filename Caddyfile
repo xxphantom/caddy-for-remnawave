@@ -1,0 +1,48 @@
+# Домен для selfsteal
+{$SELF_STEAL_DOMAIN}:{$SELF_STEAL_PORT} {
+    @local {
+        remote_ip 127.0.0.1 ::1
+    }
+
+    handle @local {
+        root * /var/www/html
+        try_files {path} /index.html
+        file_server
+    }
+
+    handle {
+        abort
+    }
+
+    log {
+        output file /var/log/caddy/{$SELF_STEAL_DOMAIN}.log
+    }
+}
+
+# Домен для Панели
+{$PANEL_DOMAIN}:{$PANEL_PORT} {
+    reverse_proxy {$BACKEND_URL} {
+        header_up X-Real-IP {remote}
+        header_up Host {host}
+    }
+
+    log {
+        output file /var/log/caddy/{$PANEL_DOMAIN}.log
+    }
+}
+
+# Домен для подписок
+{$SUB_DOMAIN}:{$SUB_PORT} {
+    handle {
+        rewrite * /api/sub{uri}
+        reverse_proxy {$BACKEND_URL} {
+            header_up X-Real-IP {remote}
+            header_up Host {host}
+        }
+    }
+
+
+    log {
+        output file /var/log/caddy/{$SUB_DOMAIN}.log
+    }
+}
