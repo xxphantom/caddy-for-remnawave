@@ -1,0 +1,18 @@
+services:
+  caddy:
+    image: caddy:2.9.1
+    container_name: caddy-remnawave
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile.xray-proxy:/etc/caddy/Caddyfile
+      - ./html:/var/www/html
+      - ./logs:/var/log/caddy
+      - caddy_data_proxy:/data
+      - caddy_config_proxy:/config
+    env_file:
+      - .env
+    network_mode: "host"
+
+volumes:
+  caddy_data_proxy:
+  caddy_config_proxy:

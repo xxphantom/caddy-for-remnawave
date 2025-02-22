@@ -1,0 +1,65 @@
+{
+    https_port {$SELF_STEAL_PORT}
+    default_bind 127.0.0.1
+    servers {
+        listener_wrappers {
+            proxy_protocol {
+                allow 127.0.0.1/32
+            }
+            tls
+        }
+    }
+    auto_https disable_redirects
+}
+
+http://{$SELF_STEAL_DOMAIN} {
+    bind 0.0.0.0
+    redir https://{$SELF_STEAL_DOMAIN}{uri} permanent
+}
+
+https://{$SELF_STEAL_DOMAIN} {
+    root * /var/www/html
+    file_server
+}
+
+http://{$PANEL_DOMAIN} {
+    bind 0.0.0.0
+    redir https://$PANEL_DOMAIN{uri} permanent
+}
+
+https://{$PANEL_DOMAIN} {
+    reverse_proxy * http://localhost:3000
+
+    log {
+        output file /var/log/caddy/{$PANEL_DOMAIN}.log
+    }
+}
+
+http://{$SUB_DOMAIN} {
+    bind 0.0.0.0
+    redir https://{$PANEL_DOMAIN}{uri} permanent
+}
+
+https://{$SUB_DOMAIN} {
+    handle {
+        rewrite * /api/sub{uri}
+        reverse_proxy {$BACKEND_URL} {
+            header_up X-Real-IP {remote}
+            header_up Host {host}
+        }
+    }
+
+    log {
+        output file /var/log/caddy/{$SUB_DOMAIN}.log
+    }
+}
+
+:{$SELF_STEAL_PORT} {
+    tls internal
+    respond 204
+}
+
+:80 {
+    bind 0.0.0.0
+    respond 204
+}
