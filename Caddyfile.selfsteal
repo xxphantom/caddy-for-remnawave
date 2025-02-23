@@ -1,0 +1,39 @@
+{
+    https_port {$SELF_STEAL_PORT}
+    default_bind 127.0.0.1
+    servers {
+        listener_wrappers {
+            proxy_protocol {
+                allow 127.0.0.1/32
+            }
+            tls
+        }
+    }
+    auto_https disable_redirects
+}
+
+http://{$SELF_STEAL_DOMAIN} {
+    bind 0.0.0.0
+    redir https://{$SELF_STEAL_DOMAIN}{uri} permanent
+}
+
+https://{$SELF_STEAL_DOMAIN} {
+    root * /var/www/html
+    try_files {path} /index.html
+    file_server
+
+    log {
+        output file /var/log/caddy/{$SELF_STEAL_DOMAIN}.log
+    }
+}
+
+
+:{$SELF_STEAL_PORT} {
+    tls internal
+    respond 204
+}
+
+:80 {
+    bind 0.0.0.0
+    respond 204
+}
