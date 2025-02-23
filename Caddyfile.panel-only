@@ -1,0 +1,27 @@
+# Домен для Панели, в этом режиме рекомендуется 443 порт
+{$PANEL_DOMAIN}:{$PANEL_PORT} {
+    reverse_proxy {$BACKEND_URL} {
+        header_up X-Real-IP {remote}
+        header_up Host {host}
+    }
+
+    log {
+        output file /var/log/caddy/{$PANEL_DOMAIN}.log
+    }
+}
+
+# Домен для подписок, в этом режиме рекомендуется 443 порт
+{$SUB_DOMAIN}:{$SUB_PORT} {
+    handle {
+        rewrite * /api/sub{uri}
+        reverse_proxy {$BACKEND_URL} {
+            header_up X-Real-IP {remote}
+            header_up Host {host}
+        }
+    }
+
+
+    log {
+        output file /var/log/caddy/{$SUB_DOMAIN}.log
+    }
+}

@@ -74,3 +74,17 @@ docker compose -f docker-compose.selfsteal.yml up -d && docker compose logs -f -
 - Remnawave нода обрабатывает весь трафик на 443 порту
 - Не-Xray-proxy запросы передаются в Caddy
 - Caddy обрабатывает трафик, возвращая selfsteal заглушку
+
+## Вариант 4: Запуск Remnawave панели без ноды, все ноды будут на других серверах
+
+1. Выполните общие шаги установки, описанные выше
+
+2. Запустите проект:
+
+```bash
+docker compose -f docker-compose.panel-only.yml up -d && docker compose logs -f -t
+```
+
+В этой конфигурации:
+- Рекомендуется в .env указать 443 порт как для панели и подписок
+- Сaddy выступает обратным прокси для панели и подписок, без selfsteal заглушки
