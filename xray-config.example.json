@@ -23,9 +23,9 @@
           "dest": "9443",
           "show": false,
           "xver": 0,
-          "shortIds": ["", "6ba85179e30d4fc2"],
-          "publicKey": "134ZpoOXd8K5NwrOwqCsRQ9vgd5FREaKJc6jAr2tK0M",
-          "privateKey": "DVWpwaBSJC59CxLVNbI5KflgSoL7Dd4rV8yHDKWTA_4",
+          "shortIds": ["change-me"],
+          "publicKey": "change-me",
+          "privateKey": "change-me",
           "serverNames": ["reality.example.com"]
         }
       }
