@@ -19,7 +19,12 @@ http://{$SELF_STEAL_DOMAIN} {
 
 https://{$SELF_STEAL_DOMAIN} {
     root * /var/www/html
+    try_files {path} /index.html
     file_server
+
+    log {
+        output file /var/log/caddy/{$SELF_STEAL_DOMAIN}.log
+    }
 }
 
 http://{$PANEL_DOMAIN} {
