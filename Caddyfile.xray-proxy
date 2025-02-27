@@ -22,9 +22,6 @@ https://{$SELF_STEAL_DOMAIN} {
     try_files {path} /index.html
     file_server
 
-    log {
-        output file /var/log/caddy/{$SELF_STEAL_DOMAIN}.log
-    }
 }
 
 http://{$PANEL_DOMAIN} {
@@ -34,10 +31,6 @@ http://{$PANEL_DOMAIN} {
 
 https://{$PANEL_DOMAIN} {
     reverse_proxy * http://localhost:3000
-
-    log {
-        output file /var/log/caddy/{$PANEL_DOMAIN}.log
-    }
 }
 
 http://{$SUB_DOMAIN} {
@@ -52,10 +45,6 @@ https://{$SUB_DOMAIN} {
             header_up X-Real-IP {remote}
             header_up Host {host}
         }
-    }
-
-    log {
-        output file /var/log/caddy/{$SUB_DOMAIN}.log
     }
 }
 

@@ -4,10 +4,6 @@
         header_up X-Real-IP {remote}
         header_up Host {host}
     }
-
-    log {
-        output file /var/log/caddy/{$PANEL_DOMAIN}.log
-    }
 }
 
 # Домен для подписок, в этом режиме рекомендуется 443 порт
@@ -18,10 +14,5 @@
             header_up X-Real-IP {remote}
             header_up Host {host}
         }
-    }
-
-
-    log {
-        output file /var/log/caddy/{$SUB_DOMAIN}.log
     }
 }

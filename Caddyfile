@@ -13,10 +13,6 @@
     handle {
         abort
     }
-
-    log {
-        output file /var/log/caddy/{$SELF_STEAL_DOMAIN}.log
-    }
 }
 
 # Домен для Панели
@@ -24,10 +20,6 @@
     reverse_proxy {$BACKEND_URL} {
         header_up X-Real-IP {remote}
         header_up Host {host}
-    }
-
-    log {
-        output file /var/log/caddy/{$PANEL_DOMAIN}.log
     }
 }
 
@@ -39,10 +31,5 @@
             header_up X-Real-IP {remote}
             header_up Host {host}
         }
-    }
-
-
-    log {
-        output file /var/log/caddy/{$SUB_DOMAIN}.log
     }
 }

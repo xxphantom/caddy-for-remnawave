@@ -22,9 +22,6 @@ https://{$SELF_STEAL_DOMAIN} {
     try_files {path} /index.html
     file_server
 
-    log {
-        output file /var/log/caddy/{$SELF_STEAL_DOMAIN}.log
-    }
 }
 
 
