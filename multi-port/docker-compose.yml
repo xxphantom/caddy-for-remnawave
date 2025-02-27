@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./html:/var/www/html
+      - ../html:/var/www/html
       - ./logs:/var/log/caddy
       - caddy_data:/data
       - caddy_config:/config

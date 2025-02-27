@@ -4,15 +4,15 @@ services:
     container_name: caddy-remnawave
     restart: unless-stopped
     volumes:
-      - ./Caddyfile.panel-only:/etc/caddy/Caddyfile
-      - ./html:/var/www/html
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ../html:/var/www/html
       - ./logs:/var/log/caddy
-      - caddy_data_panel:/data
-      - caddy_config_panel:/config
+      - caddy_data_proxy:/data
+      - caddy_config_proxy:/config
     env_file:
       - .env
     network_mode: "host"
 
 volumes:
-  caddy_data_panel:
-  caddy_config_panel:
+  caddy_data_proxy:
+  caddy_config_proxy:

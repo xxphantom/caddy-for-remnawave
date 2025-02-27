@@ -4,8 +4,8 @@ services:
     container_name: caddy-remnawave
     restart: unless-stopped
     volumes:
-      - ./Caddyfile.selfsteal:/etc/caddy/Caddyfile
-      - ./html:/var/www/html
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ../html:/var/www/html
       - ./logs:/var/log/caddy
       - caddy_data_selfsteal:/data
       - caddy_config_selfsteal:/config
