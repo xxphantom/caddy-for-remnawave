@@ -1,3 +1,5 @@
+.PHONY: start stop restart logs
+
 start:
 	docker compose up -d && docker compose logs -f -t
 
@@ -7,5 +9,5 @@ stop:
 restart:
 	docker compose down && docker compose up -d
 
-docker-logs:
+logs:
 	docker compose logs -f -t

@@ -1,3 +1,5 @@
+.PHONY: start stop restart logs
+
 start:
 	docker compose up -d && docker compose logs -f -t
 
