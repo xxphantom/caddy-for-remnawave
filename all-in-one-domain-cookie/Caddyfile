@@ -1,0 +1,69 @@
+{
+	https_port {$PORT}
+	default_bind 127.0.0.1
+	servers {
+		listener_wrappers {
+			proxy_protocol {
+				allow 127.0.0.1/32
+			}
+			tls
+		}
+	}
+	auto_https disable_redirects
+}
+
+http://{$DOMAIN} {
+	bind 0.0.0.0
+	redir https://{$DOMAIN}{uri} permanent
+}
+
+https://{$DOMAIN} {
+	@has_token_param {
+		query caddy={$PANEL_SECRET_KEY}
+	}
+	handle @has_token_param {
+		header +Set-Cookie "caddy={$PANEL_SECRET_KEY}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000"
+	}
+
+	@subscription_info_path {
+		path_regexp ^/sub/[^/]+
+	}
+
+	handle @subscription_info_path {
+		rewrite * /api{uri}
+		reverse_proxy {$BACKEND_URL} {
+			@notfound status 404
+
+			handle_response @notfound {
+				respond 404
+			}
+
+			header_up X-Real-IP {remote}
+			header_up Host {host}
+		}
+	}
+	@unauthorized {
+		not header Cookie *caddy={$PANEL_SECRET_KEY}*
+		not query caddy={$PANEL_SECRET_KEY}
+	}
+	handle @unauthorized {
+		root * /var/www/html
+		try_files {path} /index.html
+		file_server
+	}
+
+	reverse_proxy {$BACKEND_URL} {
+		header_up X-Real-IP {remote}
+		header_up Host {host}
+	}
+}
+
+:{$PORT} {
+	tls internal
+	respond 204
+}
+
+:80 {
+	bind 0.0.0.0
+	respond 204
+}
